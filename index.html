@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Nihal 3D Login</title>
+
+<!-- Google Sign-In -->
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    overflow:hidden;
+    background:#050510;
+    color:white;
+}
+
+/* ===== 3D BACKGROUND ===== */
+
+.scene{
+    position:fixed;
+    inset:0;
+    overflow:hidden;
+    background:
+    radial-gradient(circle at 15% 20%,#5b21b6 0%,transparent 30%),
+    radial-gradient(circle at 85% 80%,#0369a1 0%,transparent 30%),
+    #050510;
+}
+
+.ball{
+    position:absolute;
+    width:190px;
+    height:190px;
+    border-radius:50%;
+    background:linear-gradient(135deg,#a855f7,#06b6d4);
+    box-shadow:0 0 100px #7c3aed;
+    animation:float 7s infinite alternate ease-in-out;
+}
+
+.ball.one{
+    top:5%;
+    left:5%;
+}
+
+.ball.two{
+    right:5%;
+    bottom:5%;
+    width:230px;
+    height:230px;
+    animation-delay:2s;
+}
+
+@keyframes float{
+    from{
+        transform:translate(0,0) rotate(0deg);
+    }
+
+    to{
+        transform:translate(70px,50px) rotate(180deg);
+    }
+}
+
+/* ===== CARD ===== */
+
+.card{
+    position:relative;
+    z-index:10;
+    width:400px;
+    max-width:92%;
+    padding:35px;
+    border-radius:28px;
+
+    background:rgba(255,255,255,.09);
+
+    border:1px solid rgba(255,255,255,.2);
+
+    backdrop-filter:blur(25px);
+
+    box-shadow:
+    0 35px 100px rgba(0,0,0,.65),
+    inset 0 1px rgba(255,255,255,.2);
+}
+
+/* ===== LOGO ===== */
+
+.logo{
+    text-align:center;
+    font-size:42px;
+    font-weight:900;
+    letter-spacing:4px;
+    margin-bottom:6px;
+
+    text-shadow:
+    0 0 10px #8b5cf6,
+    0 0 30px #7c3aed;
+}
+
+.subtitle{
+    text-align:center;
+    color:#aaa;
+    margin-bottom:28px;
+}
+
+/* ===== INPUT ===== */
+
+.input-box{
+    margin:12px 0;
+}
+
+.input-box input{
+    width:100%;
+    padding:16px;
+
+    border:none;
+    outline:none;
+
+    border-radius:14px;
+
+    background:rgba(0,0,0,.28);
+
+    border:1px solid rgba(255,255,255,.12);
+
+    color:white;
+
+    font-size:15px;
+}
+
+.input-box input::placeholder{
+    color:#999;
+}
+
+/* ===== LOGIN BUTTON ===== */
+
+.login-btn{
+    width:100%;
+    padding:16px;
+
+    border:0;
+    border-radius:14px;
+
+    margin-top:10px;
+
+    color:white;
+
+    font-size:16px;
+    font-weight:bold;
+
+    cursor:pointer;
+
+    background:
+    linear-gradient(
+        90deg,
+        #7c3aed,
+        #06b6d4
+    );
+
+    box-shadow:
+    0 10px 30px rgba(78,70,229,.35);
+
+    transition:.2s;
+}
+
+.login-btn:hover{
+    transform:translateY(-2px);
+}
+
+/* ===== DIVIDER ===== */
+
+.divider{
+    display:flex;
+    align-items:center;
+
+    gap:10px;
+
+    margin:25px 0 15px;
+
+    color:#888;
+
+    font-size:12px;
+}
+
+.divider::before,
+.divider::after{
+    content:"";
+
+    height:1px;
+
+    flex:1;
+
+    background:rgba(255,255,255,.15);
+}
+
+/* ===== GOOGLE ===== */
+
+.google-box{
+    display:flex;
+    justify-content:center;
+
+    min-height:44px;
+
+    margin-top:8px;
+}
+
+/* ===== OTHER BUTTONS ===== */
+
+.other-btn{
+    width:100%;
+
+    padding:13px;
+
+    margin-top:9px;
+
+    border-radius:13px;
+
+    border:1px solid rgba(255,255,255,.15);
+
+    background:rgba(255,255,255,.07);
+
+    color:white;
+
+    cursor:pointer;
+
+    transition:.2s;
+}
+
+.other-btn:hover{
+    background:rgba(255,255,255,.14);
+}
+
+/* ===== MESSAGE ===== */
+
+.message{
+    text-align:center;
+
+    margin-top:15px;
+
+    color:#67e8f9;
+
+    font-size:13px;
+}
+
+/* ===== FOOTER ===== */
+
+.footer{
+    text-align:center;
+
+    margin-top:22px;
+
+    color:#777;
+
+    font-size:11px;
+}
+
+/* ===== DASHBOARD ===== */
+
+#dashboard{
+    display:none;
+
+    text-align:center;
+}
+
+#dashboard h2{
+    margin:18px 0 10px;
+}
+
+#dashboard p{
+    color:#bbb;
+    margin-bottom:20px;
+}
+
+.logout{
+    background:
+    linear-gradient(
+        90deg,
+        #ef4444,
+        #f97316
+    );
+}
+
+/* ===== MOBILE ===== */
+
+@media(max-width:450px){
+
+    .card{
+        padding:28px 20px;
+    }
+
+    .logo{
+        font-size:35px;
+    }
+}
+</style>
+</head>
+
+
+<body>
+
+<!-- 3D BACKGROUND -->
+
+<div class="scene">
+
+    <div class="ball one"></div>
+
+    <div class="ball two"></div>
+
+</div>
+
+
+<!-- MAIN CARD -->
+
+<div class="card">
+
+
+    <!-- LOGIN PAGE -->
+
+    <div id="loginPage">
+
+        <div class="logo">
+            NIHAL
+        </div>
+
+        <div class="subtitle">
+            Welcome back 👋
+        </div>
+
+
+        <!-- EMAIL -->
+
+        <div class="input-box">
+
+            <input
+                id="email"
+                type="email"
+                placeholder="Email address">
+
+        </div>
+
+
+        <!-- PASSWORD -->
+
+        <div class="input-box">
+
+            <input
+                id="password"
+                type="password"
+                placeholder="Password">
+
+        </div>
+
+
+        <!-- NORMAL LOGIN -->
+
+        <button
+            class="login-btn"
+            onclick="normalLogin()">
+
+            LOGIN
+
+        </button>
+
+
+        <div id="message"
+             class="message">
+        </div>
+
+
+        <!-- DIVIDER -->
+
+        <div class="divider">
+
+            OR CONTINUE WITH
+
+        </div>
+
+
+        <!-- GOOGLE OFFICIAL LOGIN -->
+
+        <div
+            id="g_id_onload"
+
+            data-client_id="1022145026764-6hov3qhal2m5ua45g9f3cipq1rgvm5jl.apps.googleusercontent.com"
+
+            data-callback="handleGoogleLogin"
+
+            data-auto_prompt="false">
+        </div>
+
+
+        <div
+            class="google-box g_id_signin"
+
+            data-type="standard"
+
+            data-size="large"
+
+            data-theme="outline"
+
+            data-text="signin_with"
+
+            data-shape="rectangular"
+
+            data-logo_alignment="left">
+        </div>
+
+
+        <!-- OTHER OPTIONS -->
+
+        <button
+            class="other-btn"
+            onclick="instagramInfo()">
+
+            📷 Instagram Login
+
+        </button>
+
+
+        <button
+            class="other-btn"
+            onclick="otherLogin()">
+
+            👤 Other Login Options
+
+        </button>
+
+
+        <div class="footer">
+
+            © 2026 Nihal • Secure Authentication
+
+        </div>
+
+    </div>
+
+
+    <!-- DASHBOARD -->
+
+    <div id="dashboard">
+
+        <div class="logo">
+            NIHAL
+        </div>
+
+        <h2>
+            Welcome 🎉
+        </h2>
+
+        <p id="welcomeText">
+        </p>
+
+        <button
+            class="login-btn logout"
+            onclick="logout()">
+
+            LOGOUT
+
+        </button>
+
+    </div>
+
+</div>
+
+
+<script>
+
+/* ==========================================
+   NORMAL LOGIN
+   ========================================== */
+
+function normalLogin(){
+
+    const email =
+        document.getElementById("email").value.trim();
+
+    const password =
+        document.getElementById("password").value;
+
+
+    if(email === "" || password === ""){
+
+        document.getElementById("message")
+            .innerText =
+            "Please enter email and password.";
+
+        return;
+    }
+
+
+    document.getElementById("loginPage")
+        .style.display = "none";
+
+
+    document.getElementById("dashboard")
+        .style.display = "block";
+
+
+    document.getElementById("welcomeText")
+        .innerText =
+        "Welcome! Login successful 🎉";
+}
+
+
+/* ==========================================
+   GOOGLE LOGIN CALLBACK
+   ========================================== */
+
+function handleGoogleLogin(response){
+
+    if(!response){
+
+        return;
+    }
+
+
+    document.getElementById("loginPage")
+        .style.display = "none";
+
+
+    document.getElementById("dashboard")
+        .style.display = "block";
+
+
+    document.getElementById("welcomeText")
+        .innerText =
+        "Google sign-in successful 🎉";
+}
+
+
+/* ==========================================
+   INSTAGRAM
+   ========================================== */
+
+function instagramInfo(){
+
+    alert(
+        "Instagram login ke liye official Meta OAuth setup karna hoga."
+    );
+
+}
+
+
+/* ==========================================
+   OTHER LOGIN
+   ========================================== */
+
+function otherLogin(){
+
+    alert(
+        "Other login options yahan add kiye ja sakte hain."
+    );
+
+}
+
+
+/* ==========================================
+   LOGOUT
+   ========================================== */
+
+function logout(){
+
+    document.getElementById("dashboard")
+        .style.display = "none";
+
+
+    document.getElementById("loginPage")
+        .style.display = "block";
+
+
+    document.getElementById("email")
+        .value = "";
+
+
+    document.getElementById("password")
+        .value = "";
+
+
+    document.getElementById("message")
+        .innerText = "";
+}
+
+</script>
+
+</body>
+</html>
